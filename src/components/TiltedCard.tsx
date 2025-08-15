@@ -19,6 +19,7 @@ interface TiltedCardProps {
   frontOverlayContent?: React.ReactNode;
   backOverlayContent?: React.ReactNode;
   displayOverlayContent?: boolean;
+  disableFlip?: boolean;
 }
 
 const springValues: SpringOptions = {
@@ -44,6 +45,7 @@ export default function TiltedCard({
   frontOverlayContent = null,
   backOverlayContent = null,
   displayOverlayContent = false,
+  disableFlip = false,
 }: TiltedCardProps) {
   const ref = useRef<HTMLElement>(null);
   const x = useMotionValue(0);
@@ -73,7 +75,7 @@ export default function TiltedCard({
 
   // 카드 플립 토글 함수
   const handleCardClick = (e: React.MouseEvent<HTMLElement>) => {
-    if (!ref.current) return;
+    if (!ref.current || disableFlip) return;
 
     const rect = ref.current.getBoundingClientRect();
     const clickX = e.clientX - rect.left;
