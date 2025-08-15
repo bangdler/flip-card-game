@@ -60,8 +60,6 @@ export default function TiltedCard({
     mass: 1,
   });
 
-  // 카드 플립 상태 관리
-  const [isFlipped, setIsFlipped] = useState(false);
   const flipRotation = useSpring(0, {
     stiffness: 200,
     damping: 25,
@@ -89,7 +87,6 @@ export default function TiltedCard({
     const rotationDelta = isLeftSide ? 180 : -180;
     const finalRotation = currentRotation + rotationDelta;
 
-    setIsFlipped(!isFlipped);
     flipRotation.set(finalRotation);
   };
 
