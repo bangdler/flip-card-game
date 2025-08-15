@@ -1,5 +1,5 @@
 import type { SpringOptions } from "motion/react";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "motion/react";
 
 interface TiltedCardProps {
@@ -72,26 +72,24 @@ export default function TiltedCard({
   const [lastY, setLastY] = useState(0);
 
   // 카드 플립 토글 함수
-  const handleCardClick = () => {
+  const handleCardClick = (e: React.MouseEvent<HTMLElement>) => {
+    if (!ref.current) return;
+
+    const rect = ref.current.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const cardCenterX = rect.width / 2;
+
+    // 클릭 위치에 따라 회전 방향 결정
+    const isLeftSide = clickX < cardCenterX;
+    const currentRotation = flipRotation.get();
+
+    // 왼쪽 클릭: +180도, 오른쪽 클릭: -180도
+    const rotationDelta = isLeftSide ? 180 : -180;
+    const finalRotation = currentRotation + rotationDelta;
+
     setIsFlipped(!isFlipped);
-    flipRotation.set(isFlipped ? 0 : 180);
+    flipRotation.set(finalRotation);
   };
-
-  // 틸트와 플립 효과를 결합하여 combinedRotateY 업데이트
-  React.useEffect(() => {
-    const unsubscribeRotateY = rotateY.on("change", () => {
-      combinedRotateY.set(rotateY.get() + flipRotation.get());
-    });
-
-    const unsubscribeFlipRotation = flipRotation.on("change", () => {
-      combinedRotateY.set(rotateY.get() + flipRotation.get());
-    });
-
-    return () => {
-      unsubscribeRotateY();
-      unsubscribeFlipRotation();
-    };
-  }, [rotateY, flipRotation, combinedRotateY]);
 
   function handleMouse(e: React.MouseEvent<HTMLElement>) {
     if (!ref.current) return;
@@ -126,6 +124,22 @@ export default function TiltedCard({
     rotateY.set(0);
     rotateFigcaption.set(0);
   }
+
+  // 틸트와 플립 효과를 결합하여 combinedRotateY 업데이트
+  useEffect(() => {
+    const unsubscribeRotateY = rotateY.on("change", () => {
+      combinedRotateY.set(rotateY.get() + flipRotation.get());
+    });
+
+    const unsubscribeFlipRotation = flipRotation.on("change", () => {
+      combinedRotateY.set(rotateY.get() + flipRotation.get());
+    });
+
+    return () => {
+      unsubscribeRotateY();
+      unsubscribeFlipRotation();
+    };
+  }, [rotateY, flipRotation, combinedRotateY]);
 
   return (
     <figure
