@@ -20,6 +20,7 @@ interface TiltedCardProps {
   backOverlayContent?: React.ReactNode;
   displayOverlayContent?: boolean;
   disableFlip?: boolean;
+  isFlipped?: boolean;
 }
 
 const springValues: SpringOptions = {
@@ -46,6 +47,7 @@ export default function TiltedCard({
   backOverlayContent = null,
   displayOverlayContent = false,
   disableFlip = false,
+  isFlipped,
 }: TiltedCardProps) {
   const ref = useRef<HTMLElement>(null);
   const x = useMotionValue(0);
@@ -139,6 +141,18 @@ export default function TiltedCard({
       unsubscribeFlipRotation();
     };
   }, [rotateY, flipRotation, combinedRotateY]);
+
+  useEffect(() => {
+    if (isFlipped !== undefined) {
+      const currentRotation = flipRotation.get();
+      const targetRotation = isFlipped ? 0 : 180;
+
+      // 현재 회전값과 목표 회전값이 다르면 회전
+      if (Math.abs(currentRotation - targetRotation) > 1) {
+        flipRotation.set(targetRotation);
+      }
+    }
+  }, [isFlipped, flipRotation]);
 
   return (
     <figure
