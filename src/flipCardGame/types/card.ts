@@ -20,7 +20,8 @@ export interface ICardDeck {
 
 export interface IFlipCardGame {
   cardDeck: ICardDeck;
-  draw: (id1: string, id2: string) => void;
+  draw: (id1: string, id2: string) => IFlipCardGame;
+  shuffle: () => IFlipCardGame;
 
   score: number;
   moves: number;
