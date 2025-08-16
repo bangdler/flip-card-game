@@ -3,27 +3,28 @@ export interface CardData {
   image: string;
 }
 
-export interface Card {
+export interface ICard {
   id: string;
   title: string;
   image: string;
   isMatched: boolean;
+  isMatch: (card: ICard) => boolean;
 }
 
-export interface CardDeck {
-  deck: Card[];
+export interface ICardDeck {
+  deck: ICard[];
   shuffle: () => void;
-  isMatch: (card1: Card, card2: Card) => boolean;
+  findCardById: (id: string) => ICard | undefined;
+  match: (id1: string, id2: string) => boolean;
 }
 
-export interface FlipCardGame {
-  cardDeck: CardDeck;
-  draw: (card1: Card, card2: Card) => void;
+export interface IFlipCardGame {
+  cardDeck: ICardDeck;
+  draw: (id1: string, id2: string) => void;
 
   score: number;
   moves: number;
-  time: number;
-  isGameOver: boolean;
-  isGameWon: boolean;
-  isGameLost: boolean;
+  status: TFlipCardGameStatus;
 }
+
+export type TFlipCardGameStatus = "playing" | "beforeStart" | "ended";
