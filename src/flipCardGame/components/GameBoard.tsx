@@ -10,6 +10,19 @@ const GameBoard: React.FC = () => {
   const { game, initializeGame, resetGame, shuffleCards, drawCards } =
     useFlipCardGameStore();
 
+  const isFlipped = (card: ICard) => {
+    return card.isMatched || selectedCard1?.id === card.id || selectedCard2?.id === card.id;
+  };
+
+  const isDisabled = (card: ICard) => {
+    return (
+      (selectedCard1 !== null && selectedCard2 !== null) ||
+      selectedCard1?.id === card.id ||
+      selectedCard2?.id === card.id ||
+      card.isMatched
+    );
+  };
+
   const handleCardClick = (card: ICard) => {
     if (!card.isMatched) {
       if (selectedCard1 === null) {
@@ -101,6 +114,27 @@ const GameBoard: React.FC = () => {
           </div>
         </div>
 
+        {/* 5초 타이머 프로그레스바 */}
+        <div className="mb-6">
+          <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+            {selectedCard1 && !selectedCard2 ? (
+              <div
+                className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full animate-progress"
+                onAnimationEnd={() => {
+                  setSelectedCard1(null);
+                }}
+              />
+            ) : (
+              <div className="h-full bg-gray-300 rounded-full" />
+            )}
+          </div>
+          <div className="text-center text-sm text-gray-600 mt-2">
+            {selectedCard1 && !selectedCard2
+              ? "5초 타이머"
+              : "카드를 선택하세요"}
+          </div>
+        </div>
+
         {/* 게임 보드 */}
         <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-8 shadow-xl">
           {game?.cardDeck.deck ? (
@@ -109,18 +143,10 @@ const GameBoard: React.FC = () => {
                 <GameCard
                   key={card.id}
                   card={card}
-                  isFlipped={
-                    card.isMatched ||
-                    selectedCard1?.id === card.id ||
-                    selectedCard2?.id === card.id
-                  }
+                  isFlipped={isFlipped(card)}
                   onClick={handleCardClick}
-                  disabled={
-                    (selectedCard1 !== null && selectedCard2 !== null) ||
-                    selectedCard1?.id === card.id ||
-                    selectedCard2?.id === card.id ||
-                    card.isMatched
-                  }
+                  disabled={isDisabled(card)}
+                  defaultFlipRotation={180}
                 />
               ))}
             </div>
