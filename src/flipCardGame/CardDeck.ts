@@ -34,6 +34,12 @@ class CardDeck implements ICardDeck {
 
     return isMatched;
   }
+
+  allFlipBack(): void {
+    this.deck.forEach((card) => {
+      card.isMatched = false;
+    });
+  }
 }
 
 export default CardDeck;

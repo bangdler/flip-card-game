@@ -21,6 +21,7 @@ interface TiltedCardProps {
   displayOverlayContent?: boolean;
   disableFlip?: boolean;
   isFlipped?: boolean;
+  defaultFlipRotation?: number;
 }
 
 const springValues: SpringOptions = {
@@ -48,6 +49,7 @@ export default function TiltedCard({
   displayOverlayContent = false,
   disableFlip = false,
   isFlipped,
+  defaultFlipRotation = 0,
 }: TiltedCardProps) {
   const ref = useRef<HTMLElement>(null);
   const x = useMotionValue(0);
@@ -62,14 +64,14 @@ export default function TiltedCard({
     mass: 1,
   });
 
-  const flipRotation = useSpring(0, {
+  const flipRotation = useSpring(defaultFlipRotation, {
     stiffness: 200,
     damping: 25,
     mass: 1,
   });
 
   // 틸트와 플립을 결합한 rotateY 값
-  const combinedRotateY = useSpring(0, springValues);
+  const combinedRotateY = useSpring(defaultFlipRotation, springValues);
 
   const [lastY, setLastY] = useState(0);
 

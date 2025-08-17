@@ -7,6 +7,7 @@ interface GameCardProps {
   isFlipped: boolean;
   onClick: (card: ICard) => void;
   disabled: boolean;
+  defaultFlipRotation?: number;
 }
 
 const GameCard: React.FC<GameCardProps> = ({
@@ -14,6 +15,7 @@ const GameCard: React.FC<GameCardProps> = ({
   isFlipped,
   onClick,
   disabled,
+  defaultFlipRotation,
 }) => {
   const handleClick = () => {
     if (!disabled) {
@@ -32,6 +34,7 @@ const GameCard: React.FC<GameCardProps> = ({
         imageWidth={"100px"}
         imageHeight={"150px"}
         disableFlip={disabled}
+        defaultFlipRotation={defaultFlipRotation}
       ></TiltedCard>
     </div>
   );

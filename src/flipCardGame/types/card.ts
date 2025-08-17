@@ -16,6 +16,7 @@ export interface ICardDeck {
   shuffle: () => void;
   findCardById: (id: string) => ICard | undefined;
   match: (id1: string, id2: string) => boolean;
+  allFlipBack: () => void;
 }
 
 export interface IFlipCardGame {
