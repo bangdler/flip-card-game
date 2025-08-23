@@ -14,11 +14,6 @@ interface TiltedCardProps {
   imageWidth?: React.CSSProperties["width"];
   scaleOnHover?: number;
   rotateAmplitude?: number;
-  showMobileWarning?: boolean;
-  showTooltip?: boolean;
-  frontOverlayContent?: React.ReactNode;
-  backOverlayContent?: React.ReactNode;
-  displayOverlayContent?: boolean;
   disableFlip?: boolean;
   isFlipped?: boolean;
   defaultFlipRotation?: number;
@@ -35,18 +30,12 @@ export default function TiltedCard({
   backImageSrc,
   frontAltText = "Front card image",
   backAltText = "Back card image",
-  captionText = "",
   containerHeight = "300px",
   containerWidth = "100%",
   imageHeight = "300px",
   imageWidth = "300px",
   scaleOnHover = 1.1,
   rotateAmplitude = 14,
-  showMobileWarning = true,
-  showTooltip = true,
-  frontOverlayContent = null,
-  backOverlayContent = null,
-  displayOverlayContent = false,
   disableFlip = false,
   isFlipped,
   defaultFlipRotation = 0,
@@ -169,11 +158,6 @@ export default function TiltedCard({
       onMouseLeave={handleMouseLeave}
       onClick={handleCardClick}
     >
-      {showMobileWarning && (
-        <div className="absolute top-4 text-center text-sm block sm:hidden">
-          This effect is not optimized for mobile. Check on desktop.
-        </div>
-      )}
 
       <motion.div
         className="relative [transform-style:preserve-3d] w-full h-full"
@@ -203,12 +187,6 @@ export default function TiltedCard({
               height: imageHeight,
             }}
           />
-
-          {displayOverlayContent && frontOverlayContent && (
-            <motion.div className="absolute top-0 left-0 z-[2] will-change-transform [transform:translateZ(30px)]">
-              {frontOverlayContent}
-            </motion.div>
-          )}
         </motion.div>
 
         {/* 카드 뒷면 */}
@@ -229,28 +207,8 @@ export default function TiltedCard({
               height: imageHeight,
             }}
           />
-
-          {displayOverlayContent && backOverlayContent && (
-            <motion.div className="absolute top-0 left-0 z-[2] will-change-transform [transform:translateZ(30px)]">
-              {backOverlayContent}
-            </motion.div>
-          )}
         </motion.div>
       </motion.div>
-
-      {showTooltip && (
-        <motion.figcaption
-          className="pointer-events-none absolute left-0 top-0 rounded-[4px] bg-white px-[10px] py-[4px] text-[10px] text-[#2d2d2d] opacity-0 z-[3] hidden sm:block"
-          style={{
-            x,
-            y,
-            opacity,
-            rotate: rotateFigcaption,
-          }}
-        >
-          {captionText}
-        </motion.figcaption>
-      )}
     </figure>
   );
 }
