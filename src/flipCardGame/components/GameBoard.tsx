@@ -6,12 +6,17 @@ import type { ICard } from "../types/card";
 const GameBoard: React.FC = () => {
   const [selectedCard1, setSelectedCard1] = useState<ICard | null>(null);
   const [selectedCard2, setSelectedCard2] = useState<ICard | null>(null);
+  const [showLastDrawResult, setShowLastDrawResult] = useState(false);
 
   const { game, initializeGame, resetGame, shuffleCards, drawCards } =
     useFlipCardGameStore();
 
   const isFlipped = (card: ICard) => {
-    return card.isMatched || selectedCard1?.id === card.id || selectedCard2?.id === card.id;
+    return (
+      card.isMatched ||
+      selectedCard1?.id === card.id ||
+      selectedCard2?.id === card.id
+    );
   };
 
   const isDisabled = (card: ICard) => {
@@ -48,6 +53,8 @@ const GameBoard: React.FC = () => {
     }
   };
 
+  const lastDrawResult = game?.drawHistory[game.drawHistory.length - 1];
+
   useEffect(() => {
     initializeGame();
   }, [initializeGame]);
@@ -58,9 +65,22 @@ const GameBoard: React.FC = () => {
         drawCards(selectedCard1.id, selectedCard2.id);
         setSelectedCard1(null);
         setSelectedCard2(null);
+        setShowLastDrawResult(true);
       }, 1000);
     }
   }, [selectedCard1, selectedCard2, drawCards]);
+
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    if (lastDrawResult) {
+      timer = setTimeout(() => {
+        setShowLastDrawResult(false);
+      }, 1000);
+    }
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [lastDrawResult]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-100 to-pink-100 p-6">
@@ -116,6 +136,9 @@ const GameBoard: React.FC = () => {
 
         {/* 5초 타이머 프로그레스바 */}
         <div className="mb-6">
+          <div className={"text-center text-sm text-gray-600 mt-2"}>
+            5초 타이머
+          </div>
           <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
             {selectedCard1 && !selectedCard2 ? (
               <div
@@ -128,11 +151,15 @@ const GameBoard: React.FC = () => {
               <div className="h-full bg-gray-300 rounded-full" />
             )}
           </div>
-          <div className="text-center text-sm text-gray-600 mt-2">
-            {selectedCard1 && !selectedCard2
-              ? "5초 타이머"
-              : "카드를 선택하세요"}
-          </div>
+          {showLastDrawResult ? (
+            <div className="text-center text-sm text-gray-600 mt-2">
+              {lastDrawResult?.isMatch ? "매치!" : "노매치!"}
+            </div>
+          ) : (
+            <div className="text-center text-sm text-gray-600 mt-2">
+              카드를 선택하세요
+            </div>
+          )}
         </div>
 
         {/* 게임 보드 */}
