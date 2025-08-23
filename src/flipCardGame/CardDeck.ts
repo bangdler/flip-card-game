@@ -1,4 +1,4 @@
-import type { ICard, ICardDeck } from "./types/card";
+import type { DrawResult, ICard, ICardDeck } from "./types/card";
 
 class CardDeck implements ICardDeck {
   readonly deck: ICard[];
@@ -17,12 +17,12 @@ class CardDeck implements ICardDeck {
     return this.deck.find((card) => card.id === id)!;
   }
   
-  match(id1: string, id2: string): boolean {
+  match(id1: string, id2: string): DrawResult | null {
     const card1 = this.findCardById(id1);
     const card2 = this.findCardById(id2);
 
     if (!card1 || !card2) {
-      return false;
+      return null
     }
 
     const isMatched = card1.isMatch(card2);
@@ -32,7 +32,10 @@ class CardDeck implements ICardDeck {
       card2.isMatched = true;
     }
 
-    return isMatched;
+    return {
+      drawCards: [card1, card2],
+      isMatch: isMatched,
+    };
   }
 
   allFlipBack(): void {
