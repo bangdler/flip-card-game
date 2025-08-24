@@ -24,7 +24,7 @@ export const useFlipCardGameStore = create<FlipCardGameState>()(
       initializeGame: () => {
         const cards = DeckMaker.createDeck(animalData);
         const cardDeck = new CardDeck(cards);
-        cardDeck.shuffle()
+        cardDeck.shuffle();
         const game = new FlipCardGame(cardDeck, 0, 0, "beforeStart", []);
 
         set({ game });
