@@ -1,5 +1,5 @@
 import type { SpringOptions } from "motion/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { motion, useMotionValue, useSpring } from "motion/react";
 
 interface TiltedCardProps {
@@ -20,7 +20,7 @@ interface TiltedCardProps {
 }
 
 const springValues: SpringOptions = {
-  damping: 30,
+  damping: 20,
   stiffness: 100,
   mass: 2,
 };
@@ -47,11 +47,6 @@ export default function TiltedCard({
   const rotateY = useSpring(useMotionValue(0), springValues);
   const scale = useSpring(1, springValues);
   const opacity = useSpring(0);
-  const rotateFigcaption = useSpring(0, {
-    stiffness: 350,
-    damping: 30,
-    mass: 1,
-  });
 
   const flipRotation = useSpring(defaultFlipRotation, {
     stiffness: 200,
@@ -61,8 +56,6 @@ export default function TiltedCard({
 
   // 틸트와 플립을 결합한 rotateY 값
   const combinedRotateY = useSpring(defaultFlipRotation, springValues);
-
-  const [lastY, setLastY] = useState(0);
 
   // 카드 플립 토글 함수
   const handleCardClick = (e: React.MouseEvent<HTMLElement>) => {
@@ -98,10 +91,6 @@ export default function TiltedCard({
 
     x.set(e.clientX - rect.left);
     y.set(e.clientY - rect.top);
-
-    const velocityY = offsetY - lastY;
-    rotateFigcaption.set(-velocityY * 0.6);
-    setLastY(offsetY);
   }
 
   function handleMouseEnter() {
@@ -114,7 +103,6 @@ export default function TiltedCard({
     scale.set(1);
     rotateX.set(0);
     rotateY.set(0);
-    rotateFigcaption.set(0);
   }
 
   // 틸트와 플립 효과를 결합하여 combinedRotateY 업데이트
@@ -158,7 +146,6 @@ export default function TiltedCard({
       onMouseLeave={handleMouseLeave}
       onClick={handleCardClick}
     >
-
       <motion.div
         className="relative [transform-style:preserve-3d] w-full h-full"
         style={{
