@@ -35,7 +35,7 @@ class FlipCardGame implements IFlipCardGame {
     }
 
     if (isMatch.isMatch) {
-      this.score += 1;
+      this.score += 10;
     }
 
     if (this.isAllMatched()) {
