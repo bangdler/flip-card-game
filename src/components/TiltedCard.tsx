@@ -1,6 +1,12 @@
 import type { SpringOptions } from "motion/react";
 import React, { useEffect, useRef } from "react";
-import { motion, useMotionValue, useSpring } from "motion/react";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  useMotionTemplate,
+} from "motion/react";
 
 interface TiltedCardProps {
   frontImageSrc: React.ComponentProps<"img">["src"];
@@ -56,6 +62,29 @@ export default function TiltedCard({
 
   // 틸트와 플립을 결합한 rotateY 값
   const combinedRotateY = useSpring(defaultFlipRotation, springValues);
+
+  // 광택 효과를 위한 motion values
+  const diagonalMovement = useTransform<number, number>(
+    [rotateX, rotateY],
+    ([newRotateX, newRotateY]) => {
+      const position: number = newRotateX + newRotateY;
+      return position;
+    }
+  );
+
+  const sheenPosition = useTransform(diagonalMovement, [-14, 14], [-100, 200]);
+
+  const sheenOpacity = useTransform(
+    sheenPosition,
+    [-100, 50, 200],
+    [0, 0.3, 0]
+  );
+
+  const sheenGradient = useMotionTemplate`linear-gradient(
+    55deg,
+    transparent,
+    rgba(255 255 255 / ${sheenOpacity}) ${sheenPosition}%,
+    transparent)`;
 
   // 카드 플립 토글 함수
   const handleCardClick = (e: React.MouseEvent<HTMLElement>) => {
@@ -174,6 +203,15 @@ export default function TiltedCard({
               height: imageHeight,
             }}
           />
+
+          {/* 글래스 레이어 */}
+          <motion.div
+            className="absolute top-0 left-0 w-full h-full rounded-[15px] pointer-events-none"
+            style={{
+              backdropFilter: "brightness(120%)",
+              background: sheenGradient,
+            }}
+          />
         </motion.div>
 
         {/* 카드 뒷면 */}
@@ -192,6 +230,15 @@ export default function TiltedCard({
             style={{
               width: imageWidth,
               height: imageHeight,
+            }}
+          />
+
+          {/* 글래스 레이어 */}
+          <motion.div
+            className="absolute top-0 left-0 w-full h-full rounded-[15px] pointer-events-none"
+            style={{
+              backdropFilter: "brightness(120%)",
+              background: sheenGradient,
             }}
           />
         </motion.div>
