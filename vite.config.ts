@@ -3,12 +3,16 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [react(), tailwindcss()],
-  base: "/",
-  build: {
-    outDir: "dist",
-    assetsDir: "assets",
-    sourcemap: false,
-  },
+export default defineConfig(({ command }) => {
+  const base = command === "serve" ? "/" : "/flip-card-game/";
+
+  return {
+    plugins: [react(), tailwindcss()],
+    base: base,
+    build: {
+      outDir: "dist",
+      assetsDir: "assets",
+      sourcemap: false,
+    },
+  };
 });
