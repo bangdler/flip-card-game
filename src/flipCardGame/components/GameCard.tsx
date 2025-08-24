@@ -23,11 +23,13 @@ const GameCard: React.FC<GameCardProps> = ({
     }
   };
 
+  const BASE_URL = import.meta.env.BASE_URL;
+
   return (
     <div onClick={handleClick}>
       <TiltedCard
         frontImageSrc={card.image}
-        backImageSrc={"./card-back.png"}
+        backImageSrc={`${BASE_URL}card-back.png`}
         isFlipped={isFlipped}
         containerHeight={"150px"}
         containerWidth={"100px"}

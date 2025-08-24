@@ -1,53 +1,55 @@
 import type { CardData } from "../types/card";
 
+const BASE_URL = import.meta.env.BASE_URL;
+
 const animalData: CardData[] = [
   {
     title: "Rat",
-    image: "/rat.png",
+    image: `${BASE_URL}rat.png`,
   },
   {
     title: "Ox",
-    image: "/ox.png",
+    image: `${BASE_URL}ox.png`,
   },
   {
     title: "Tiger",
-    image: "/tiger.png",
+    image: `${BASE_URL}tiger.png`,
   },
   {
     title: "Rabbit",
-    image: "/rabbit.png",
+    image: `${BASE_URL}rabbit.png`,
   },
   {
     title: "Dragon",
-    image: "/dragon.png",
+    image: `${BASE_URL}dragon.png`,
   },
   {
     title: "Snake",
-    image: "/snake.png",
+    image: `${BASE_URL}snake.png`,
   },
   {
     title: "Horse",
-    image: "/horse.png",
+    image: `${BASE_URL}horse.png`,
   },
   {
     title: "Sheep",
-    image: "/sheep.png",
+    image: `${BASE_URL}sheep.png`,
   },
   {
     title: "Monkey",
-    image: "/monkey.png",
+    image: `${BASE_URL}monkey.png`,
   },
   {
     title: "Chicken",
-    image: "/chicken.png",
+    image: `${BASE_URL}chicken.png`,
   },
   {
     title: "Dog",
-    image: "/dog.png",
+    image: `${BASE_URL}dog.png`,
   },
   {
     title: "Pig",
-    image: "/pig.png",
+    image: `${BASE_URL}pig.png`,
   },
 ];
 
